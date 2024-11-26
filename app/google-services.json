@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "772133125971",
+    "firebase_url": "https://globego-9f688-default-rtdb.firebaseio.com",
+    "project_id": "globego-9f688",
+    "storage_bucket": "globego-9f688.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772133125971:android:b4484b952a491f657beba6",
+        "android_client_info": {
+          "package_name": "com.example.globego"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "772133125971-d3qk95qm44qvgi95rds0l1pmvvb2v6dk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.globego",
+            "certificate_hash": "eb09f62120a38af84e8c0a2351be1a1f2a55c72d"
+          }
+        },
+        {
+          "client_id": "772133125971-2fl3cf7gtibrs8k1o44dai7vfagtajot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC_ENZunvg97FvEMYVqklpMpOiaSVpiZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "772133125971-2fl3cf7gtibrs8k1o44dai7vfagtajot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
