@@ -167,7 +167,6 @@ public class MainActivity extends BaseActivity {
                     if (!list.isEmpty()) {
                         binding.recyclerViewPopular.setLayoutManager(new LinearLayoutManager
                                 (MainActivity.this,LinearLayoutManager.HORIZONTAL ,false));
-
                         RecyclerView.Adapter adapter = new PopularAdapter(list);
                         binding.recyclerViewPopular.setAdapter(adapter);
                     }
@@ -180,10 +179,12 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
     private void initRecommended () {
         DatabaseReference myRef = database.getReference ("Item");
         binding.progressBarRecommended.setVisibility(View.VISIBLE);
         ArrayList<ItemDomain> list = new ArrayList<>();
+
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange (@NonNull DataSnapshot snapshot) {
@@ -194,7 +195,6 @@ public class MainActivity extends BaseActivity {
                     if (!list.isEmpty()) {
                         binding.recyclerViewRecommended.setLayoutManager(new LinearLayoutManager
                                 (MainActivity.this,LinearLayoutManager.HORIZONTAL,false));
-
                         RecyclerView.Adapter adapter = new RecommendedAdapter(list);
                         binding.recyclerViewRecommended.setAdapter(adapter);
                     }

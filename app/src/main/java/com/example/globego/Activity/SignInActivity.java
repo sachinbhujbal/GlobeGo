@@ -53,9 +53,7 @@ public class SignInActivity extends BaseActivity {
         setContentView(binding.getRoot());
         mAuth=FirebaseAuth.getInstance();
 
-        //
         firebaseAuth = FirebaseAuth.getInstance();
-
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)) // From google-services.json
                 .requestEmail()
@@ -166,5 +164,4 @@ public class SignInActivity extends BaseActivity {
                     }
                 });
     }
-
 }

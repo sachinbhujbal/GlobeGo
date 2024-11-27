@@ -21,6 +21,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Viewho
     private int lastSelectedPosition=-1;
     private Context context;
 
+    ViewholderCategoryBinding binding;
+
     public CategoryAdapter(List<Category> items) {
         this.items = items;
     }
