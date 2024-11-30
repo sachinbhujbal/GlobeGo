@@ -16,13 +16,14 @@ public class CartManager {
 
     //
     private static final String CART_PREFS = "cart_prefs";
-    private static final String CART_ITEMS_KEY = "cart_items";
+    // private static final String CART_ITEMS_KEY = "cart_items";
 
 
     // Add item to cart
-    public static void addToCart(CartItem item,Context context) {
+    public static void addToCart(CartItem item,Context context, String userId) {
+        loadCart(context, userId);
         cartList.add(item);
-        saveCart(context);
+        saveCart(context,userId);
     }
 
     // Get the cart list
@@ -31,10 +32,10 @@ public class CartManager {
     }
 
     // Remove item from cart by index
-    public static void removeFromCart(int index,Context context) {
+    public static void removeFromCart(int index,Context context,String userID) {
         if (index >= 0 && index < cartList.size()) {
             cartList.remove(index);
-            saveCart(context);
+            saveCart(context,userID);
         }
     }
     public static boolean isItemInCart(CartItem newItem) {
@@ -47,21 +48,21 @@ public class CartManager {
         return false;
     }
     // Save cart items to SharedPreferences
-    public static void saveCart(Context context) {
+    public static void saveCart(Context context, String userId) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
         String json = gson.toJson(cartList);
-        editor.putString(CART_ITEMS_KEY, json);
+        editor.putString(CART_ITEMS_KEY(userId), json);
         editor.apply();  // Asynchronously save changes
     }
 
     // Load cart items from SharedPreferences
-    public static void loadCart(Context context) {
+    public static void loadCart(Context context, String userId) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(CART_ITEMS_KEY, null);
+        String json = sharedPreferences.getString(CART_ITEMS_KEY(userId), null);
 
         Type type = new TypeToken<ArrayList<CartItem>>() {}.getType();
         cartList = gson.fromJson(json, type);
@@ -72,13 +73,17 @@ public class CartManager {
     }
 
     // Clear the cart
-    public static void clearCart(Context context) {
+    public static void clearCart(Context context, String userId) {
         cartList.clear();  // Clear the in-memory cart list
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(CART_ITEMS_KEY);  // Remove the cart items key from SharedPreferences
+        editor.remove(CART_ITEMS_KEY(userId));  // Remove the cart items key from SharedPreferences
         editor.apply();  // Apply changes asynchronously
+    }
+    // Generate user-specific key for cart items
+    private static String CART_ITEMS_KEY(String userId) {
+        return "cart_items_" + userId;
     }
 
 }

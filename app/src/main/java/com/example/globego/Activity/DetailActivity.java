@@ -1,5 +1,6 @@
 package com.example.globego.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,8 +13,8 @@ import com.bumptech.glide.Glide;
 import com.example.globego.Domain.CartItem;
 import com.example.globego.Domain.ItemDomain;
 import com.example.globego.Manager.CartManager;
-import com.example.globego.R;
 import com.example.globego.databinding.ActivityDetailBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,8 @@ public class DetailActivity extends BaseActivity {
         binding=ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        CartManager.loadCart(this);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        CartManager.loadCart(this,userId);
 
         binding.addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +53,7 @@ public class DetailActivity extends BaseActivity {
                     );
 
                     if (!CartManager.isItemInCart(newItem)) {
-                        CartManager.addToCart(newItem,DetailActivity.this);
+                        CartManager.addToCart(newItem,DetailActivity.this,userId);
                         Toast.makeText(DetailActivity.this, "Item added to cart", Toast.LENGTH_SHORT).show();
 
 

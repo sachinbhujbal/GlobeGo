@@ -15,22 +15,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
 import com.example.globego.Adapter.CartAdapter;
 import com.example.globego.Domain.CartItem;
 import com.example.globego.Domain.ItemDomain;
-import com.example.globego.Domain.UserData;
 import com.example.globego.Manager.CartManager;
 import com.example.globego.R;
 import com.example.globego.databinding.ActivityCartBinding;
+import com.google.firebase.auth.FirebaseAuth;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -63,7 +56,9 @@ public class CartActivity extends BaseActivity implements CartAdapter.OnItemClic
         binding=ActivityCartBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        CartManager.loadCart(this);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        CartManager.loadCart(this,userId);
 
         // Initialize cartList with items from CartManager if not null
         ArrayList<CartItem> cartItemsFromManager = (ArrayList<CartItem>) CartManager.getCartList();
@@ -155,11 +150,12 @@ public class CartActivity extends BaseActivity implements CartAdapter.OnItemClic
 
     @Override
     public void onDeleteClick(int position) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (cartList != null && !cartList.isEmpty() && position < cartList.size()) {
             // Remove the item from the cart list
             CartItem item = cartList.get(position);
             cartList.remove(position);
-            CartManager.removeFromCart(position,CartActivity.this);
+            CartManager.removeFromCart(position,CartActivity.this,userId);
             cartAdapter.notifyItemRemoved(position);
             totalPrice -= item.getPrice();
             updatePriceText();
@@ -170,17 +166,18 @@ public class CartActivity extends BaseActivity implements CartAdapter.OnItemClic
 
     @Override
     public void onPaymentSuccess(String s) {
-
+        double finalTotalPrice = totalPrice;
         getTicket();
         clearCart();
         Toast.makeText(this,"Payment Successful",Toast.LENGTH_SHORT).show();
-        sendPaymentNotification();
+        sendPaymentNotification(finalTotalPrice);
 
     }
     // Method to clear the cart after payment
     private void clearCart() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         cartList.clear();  // Clear all items from the cart list
-        CartManager.clearCart(this);  // Save the cleared cart to SharedPreferences
+        CartManager.clearCart(this,userId);  // Save the cleared cart to SharedPreferences
         cartAdapter.notifyDataSetChanged();  // Notify adapter that data has changed
         totalPrice = 0.0;  // Reset total price
         updatePriceText();  // Update the price display to show $0
@@ -218,10 +215,9 @@ public class CartActivity extends BaseActivity implements CartAdapter.OnItemClic
     }
 
 
-    private void sendPaymentNotification() {
+    private void sendPaymentNotification(double finalTotalPrice) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String channelId = "payment_success_channel";
-
         // For Android 8.0+ (Oreo)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -241,7 +237,7 @@ public class CartActivity extends BaseActivity implements CartAdapter.OnItemClic
                     .setSmallIcon(R.drawable.bed) // Replace with your icon
                     .setLargeIcon(largeIcon)  // Add large icon
                     .setContentTitle("Payment Successful")
-                    .setContentText("Your payment of ₹" + totalPrice + " is complete.")
+                    .setContentText("Your payment of ₹" + finalTotalPrice + " is complete.")
                     .setAutoCancel(true)
                     .setStyle(new Notification.BigPictureStyle()
                             .bigPicture(bigPicture) // Show a big image

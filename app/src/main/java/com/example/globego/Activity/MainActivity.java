@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity {
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //
         RecyclerView recyclerView = findViewById(R.id.recyclerViewCategory);
         List<CartItem> cartItems = new ArrayList<>();
@@ -93,7 +94,7 @@ public class MainActivity extends BaseActivity {
         binding.cartImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CartManager.loadCart(MainActivity.this);
+                CartManager.loadCart(MainActivity.this,userId);
                 if (CartManager.getCartList().isEmpty()) {
                     Toast.makeText(MainActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
                 }
