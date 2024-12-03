@@ -17,6 +17,7 @@ import com.example.globego.databinding.ActivityDetailBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DetailActivity extends BaseActivity {
     ActivityDetailBinding binding;
@@ -30,7 +31,22 @@ public class DetailActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        CartManager.loadCart(this,userId);
+      //  CartManager.loadCart(this,userId);
+        // Load cart from Firebase
+        CartManager.loadCartFromFirebase(userId, new CartManager.FirebaseCartLoadCallback() {
+
+            @Override
+            public void onCartLoaded(List<CartItem> cartItems) {
+             //   Toast.makeText(DetailActivity.this, "Cart loaded successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Toast.makeText(DetailActivity.this, "Failed to load cart", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        });
+
 
         binding.addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override

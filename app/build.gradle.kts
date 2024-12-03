@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.play.services.fido)
     testImplementation(libs.junit)
+    testImplementation (libs.mockito.core)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 

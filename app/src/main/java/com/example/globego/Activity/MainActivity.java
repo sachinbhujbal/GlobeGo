@@ -94,7 +94,20 @@ public class MainActivity extends BaseActivity {
         binding.cartImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CartManager.loadCart(MainActivity.this,userId);
+                // CartManager.loadCart(MainActivity.this,userId);
+                CartManager.loadCartFromFirebase(userId, new CartManager.FirebaseCartLoadCallback() {
+
+                    @Override
+                    public void onCartLoaded(List<CartItem> cartItems) {
+                      //  Toast.makeText(MainActivity.this, "Cart loaded successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Toast.makeText(MainActivity.this, "Failed to load cart", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                });
                 if (CartManager.getCartList().isEmpty()) {
                     Toast.makeText(MainActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
                 }
@@ -103,6 +116,7 @@ public class MainActivity extends BaseActivity {
                     startActivity(intent);
                     finish();
                 }
+
             }
         });
 

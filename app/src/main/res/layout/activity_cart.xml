@@ -2,28 +2,42 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cartRecyclerView"
-        android:layout_width="0dp"
+    <!-- NestedScrollView for scrolling the entire layout -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/footerLayout">
 
+        <!-- Content inside the NestedScrollView -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- RecyclerView for cart items -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cartRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/cart_item" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Footer Layout for Price, Person text, and Add to Cart Button -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/footerLayout"
         android:layout_width="match_parent"
         android:layout_height="75dp"
+        android:padding="2dp"
         android:background="@color/lightGray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Price Text -->
         <TextView
@@ -31,13 +45,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="6dp"
             android:text="$000"
             android:textColor="@color/blue"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView19"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,17 +61,15 @@
             android:text=" /Person"
             android:textColor="@color/darkBlue"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/priceTxt"
-            app:layout_constraintEnd_toStartOf="@+id/makePayment"
-            app:layout_constraintStart_toEndOf="@+id/priceTxt"
-            app:layout_constraintTop_toTopOf="@+id/priceTxt" />
+            app:layout_constraintBottom_toBottomOf="@id/priceTxt"
+            app:layout_constraintStart_toEndOf="@id/priceTxt"
+            app:layout_constraintTop_toTopOf="@id/priceTxt" />
 
-        <!-- Add to Cart Button -->
+        <!-- Make Payment Button -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/makePayment"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/blue_bg"
             android:text="Make Payment"
@@ -68,10 +78,6 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView19"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
-

@@ -27,9 +27,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
+import org.jetbrains.annotations.TestOnly;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CartActivity extends BaseActivity implements CartAdapter.OnItemClickListener, PaymentResultListener {
 
@@ -58,7 +60,20 @@ public class CartActivity extends BaseActivity implements CartAdapter.OnItemClic
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        CartManager.loadCart(this,userId);
+//        CartManager.loadCart(this,userId);
+        CartManager.loadCartFromFirebase(userId, new CartManager.FirebaseCartLoadCallback() {
+
+            @Override
+            public void onCartLoaded(List<CartItem> cartItems) {
+            //    Toast.makeText(CartActivity.this, "Cart loaded successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Toast.makeText(CartActivity.this, "Failed to load cart", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        });
 
         // Initialize cartList with items from CartManager if not null
         ArrayList<CartItem> cartItemsFromManager = (ArrayList<CartItem>) CartManager.getCartList();

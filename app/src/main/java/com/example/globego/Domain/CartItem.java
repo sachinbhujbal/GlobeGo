@@ -19,6 +19,9 @@ public class CartItem implements Serializable{
     private int bed;
 
 
+    public CartItem() {
+
+    }
 
     // Add a reference to ItemDomain
     private ItemDomain itemDomain;
