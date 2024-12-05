@@ -26,21 +26,18 @@ public class CartManager {
     // Add item to cart
     public static void addToCart(CartItem item,Context context, String userId) {
         loadCart(context, userId);
-        cartList.add(item);
-        saveCart(context,userId);
-        saveCartToFirebase(userId);
+        if(!isItemInCart(item)) {
+            cartList.add(item);
+            saveCart(context, userId);
+            saveCartToFirebase(userId);
+        }
     }
 
     // Get the cart list
     public static List<CartItem> getCartList() {
-        return cartList;
+       // return cartList;
+        return new ArrayList<>(cartList);
     }
-//    public static List<CartItem> getCartList() {
-//        if (cartList == null) {
-//            cartList = new ArrayList<>(); // Initialize the list if it's null
-//        }
-//        return cartList;
-//    }
 
     // Remove item from cart by index
     public static void removeFromCart(int index,Context context,String userId) {
@@ -77,10 +74,17 @@ public class CartManager {
         String json = sharedPreferences.getString(CART_ITEMS_KEY(userId), null);
 
         Type type = new TypeToken<ArrayList<CartItem>>() {}.getType();
-        cartList = gson.fromJson(json, type);
+       // cartList = gson.fromJson(json, type);
+        List<CartItem> loadedCart = gson.fromJson(json, type);
 
-        if (cartList == null) {
-            cartList = new ArrayList<>();
+//        if (cartList == null) {
+//            cartList = new ArrayList<>();
+//        }
+        if (loadedCart != null) {
+            cartList.clear();
+            cartList.addAll(loadedCart); // Preserve existing cart items
+        } else {
+            cartList = new ArrayList<>(); // Initialize if null
         }
     }
 

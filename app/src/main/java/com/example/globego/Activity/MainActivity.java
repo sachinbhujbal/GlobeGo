@@ -85,6 +85,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+
                 Intent intent=new Intent(MainActivity.this, SignInActivity.class);
                 startActivity(intent);
                 finish();
